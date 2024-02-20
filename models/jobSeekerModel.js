@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const adminSchema = new mongoose.Schema({
+const jobSeekerSchema = new mongoose.Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -10,7 +10,11 @@ const adminSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    contact: String
+    contact_no: {
+        type: String,
+        required: true
+    },
+    profilePicUrl: String
 });
 
-module.exports =  mongoose.model('Admin', adminSchema);
+module.exports =  mongoose.model('JobSeeker', jobSeekerSchema);
