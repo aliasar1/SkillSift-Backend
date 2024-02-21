@@ -10,7 +10,12 @@ const adminSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    contact: String
+    contact: String,
+    email: {
+        type: String,
+        required: [true, "Please add email address"],
+        unique: [true, "Email address already taken"],
+    },
 });
 
 module.exports =  mongoose.model('Admin', adminSchema);

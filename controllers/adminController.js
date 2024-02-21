@@ -1,58 +1,54 @@
 const asyncHandler = require('express-async-handler');
 const Admin = require('../models/adminModel');
+const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const registerAdmin = asyncHandler(async (req, res) => {
-    const { username, email, password } = req.body;
-    if(!username || !email || !password){
-        res.status(400);
-        throw new Error("All fields are required");
-    }
-    const adminAvailable = await User.findOne({email});
+    const { fullname, contact, username, email, password } = req.body;
+    try {
+        if (!fullname || !contact || !username || !email || !password) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
 
-    if(adminAvailable){
-        res.status(400);
-        throw new Error("Admin already registered");
-    }
+        const adminExist = await Admin.findOne({ email });
+        if (adminExist) {
+            return res.status(400).json({ message: "Email already exists" });
+        }
 
-    // Hashed Pass
-    const hashedPass = await bcrypt.hash(password, 10);
-    const admin = await Admin.create({
-       username: username, email: email, password: hashedPass
-    });
-    if(admin){
-        res.status(201).json({_id: admin.id, email: admin.email});   
+        const hashedPass = await bcrypt.hash(password, 10);
+        const user = await User.create({ username, email, password: hashedPass, role: "admin" });
+
+        const admin = await Admin.create({ user_id: user._id, fullname, contact, email });
+
+        res.status(201).json({ _id: admin._id, username: user.username, email: user.email });
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({ message: "Admin data not valid" });
     }
-    else{
-        res.status(400);
-        throw new Error("Admin data not valid");
-    }
-    res.json({message: "Registered successfully"});
 });
 
 const loginAdmin = asyncHandler(async (req, res) => {
-    const {email, password} = req.body;
-    if(!email || !password){
-        res.status(400);
-        throw new Error("All fields are required");
+    const { email, password } = req.body;
+    if (!email || !password) {
+        res.status(400).json({ message: "All fields are required" });
+        return;
     }
-    const admin = await Admin.findOne({email});
-    if(admin && (await bcrypt.compare(password, admin.password))){
+
+    const user = await User.findOne({ email });
+    if (user && await bcrypt.compare(password, user.password)) {
+        const admin = Admin.findOne({ email });
         const accessToken = jwt.sign({
-                admin: {
-                    username: admin.username,
-                    email: admin.email,
-                    id: admin.id,
-                },
-            }, process.env.ACCESS_TOKEN_SECRET,
-            {expiresIn: "365d"}
-        );
-        res.status(200).json({accessToken});
-    }
-    else{
-        res.status(401);
-        throw new Error("Email or password is not valid.");
+            admin: {
+                username: user.username,
+                email: user.email,
+                id: admin.id,
+            },
+        }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "7d" });
+
+        res.status(200).json({ accessToken });
+    } else {
+        res.status(401).json({ message: "Email or password is not valid" });
     }
 });
 
@@ -60,4 +56,4 @@ const currentAdmin = asyncHandler(async (req, res) => {
     res.json(req.admin);
 });
 
-module.exports = {registerAdmin, loginAdmin, currentAdmin};
+module.exports = { registerAdmin, loginAdmin, currentAdmin };
