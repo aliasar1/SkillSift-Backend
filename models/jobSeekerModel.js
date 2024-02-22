@@ -14,7 +14,12 @@ const jobSeekerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    profilePicUrl: String
+    profilePicUrl: String,
+    email: {
+        type: String,
+        required: [true, "Please add email address"],
+        unique: [true, "Email address already taken"],
+    },
 });
 
 module.exports =  mongoose.model('JobSeeker', jobSeekerSchema);

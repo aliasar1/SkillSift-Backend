@@ -22,7 +22,12 @@ const recruiterSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Job'
     }],
-    profilePicUrl: String
+    profilePicUrl: String,
+    email: {
+        type: String,
+        required: [true, "Please add email address"],
+        unique: [true, "Email address already taken"],
+    },
 });
 
 module.exports = mongoose.model('Recruiter', recruiterSchema);
