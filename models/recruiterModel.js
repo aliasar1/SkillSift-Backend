@@ -22,7 +22,10 @@ const recruiterSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Job'
     }],
-    profilePicUrl: String,
+    profilePicUrl: {
+        type: String,
+        default: '',
+    },
     email: {
         type: String,
         required: [true, "Please add email address"],
