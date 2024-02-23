@@ -5,33 +5,33 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const registerAdmin = asyncHandler(async (req, res) => {
-    const { fullname, contact, username, email, password } = req.body;
+    const { fullname, contact, email, password } = req.body;
     try {
-        if (!fullname || !contact || !username || !email || !password) {
-            return res.status(400).json({ message: "All fields are required" });
+        if (!fullname || !contact || !email || !password) {
+            return res.status(400).json({ error: "All fields are required" });
         }
 
         const adminExist = await Admin.findOne({ email });
         if (adminExist) {
-            return res.status(400).json({ message: "Email already exists" });
+            return res.status(400).json({ error: "Email already exists" });
         }
 
         const hashedPass = await bcrypt.hash(password, 10);
-        const user = await User.create({ username, email, password: hashedPass, role: "admin" });
+        const user = await User.create({  email, password: hashedPass, role: "admin" });
 
         const admin = await Admin.create({ user_id: user._id, fullname, contact, email });
 
-        res.status(201).json({ _id: admin._id, username: user.username, email: user.email });
+        res.status(201).json({ _id: admin._id, email: user.email });
     } catch (error) {
         console.error(error);
-        res.status(400).json({ message: "Admin data not valid" });
+        res.status(400).json({ error: "Admin data not valid" });
     }
 });
 
 const loginAdmin = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
-        res.status(400).json({ message: "All fields are required" });
+        res.status(400).json({ error: "All fields are required" });
         return;
     }
 
@@ -40,7 +40,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
         const admin = Admin.findOne({ email });
         const accessToken = jwt.sign({
             admin: {
-                username: user.username,
+                fullname: admin.fullname,
                 email: user.email,
                 id: admin.id,
             },
@@ -48,7 +48,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
 
         res.status(200).json({ accessToken });
     } else {
-        res.status(401).json({ message: "Email or password is not valid" });
+        res.status(401).json({ error: "Email or password is not valid" });
     }
 });
 

@@ -5,9 +5,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const registerJobSeeker = asyncHandler(async (req, res) => {
-    const { fullname, contact_no, username, email, password } = req.body;
+    const { fullname, contact_no, email, password } = req.body;
     try {
-        if (!fullname || !contact_no || !username || !email || !password) {
+        if (!fullname || !contact_no || !email || !password) {
             return res.status(400).json({ message: "All fields are required" });
         }
 
@@ -17,11 +17,11 @@ const registerJobSeeker = asyncHandler(async (req, res) => {
         }
 
         const hashedPass = await bcrypt.hash(password, 10);
-        const user = await User.create({ username, email, password: hashedPass, role: "jobseeker" });
+        const user = await User.create({ email, password: hashedPass, role: "jobseeker" });
 
         const jobSeeker = await JobSeeker.create({ user_id: user._id, fullname, contact_no, email });
 
-        res.status(201).json({ _id: jobSeeker._id, username: user.username, email: user.email });
+        res.status(201).json({ _id: jobSeeker._id, email: user.email });
     } catch (error) {
         console.error(error);
         res.status(400).json({ message: "JobSeeker data not valid" });
@@ -41,7 +41,7 @@ const loginJobSeeker = asyncHandler(async (req, res) => {
         const jobSeeker = await JobSeeker.findOne({ email });
         const accessToken = jwt.sign({
             jobSeeker: {
-                username: user.username,
+                fullname: jobSeeker.fullname,
                 email: user.email,
                 id: jobSeeker.id,
             },

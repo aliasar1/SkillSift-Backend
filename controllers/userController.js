@@ -11,7 +11,7 @@ exports.modifyUser = asyncHandler(async (req, res) => {
     try {
         const user = await User.findById(req.params.userId);
         if (!user) {
-            res.status(404).json({ message: 'User not found' });
+            res.status(404).json({ error: 'User not found' });
             return;
         }
         if(user.role == 'jobseeker'){
@@ -24,7 +24,7 @@ exports.modifyUser = asyncHandler(async (req, res) => {
             const { fullname, contact } = req.body;
             const admin = Admin.findOne({ email: user.email });
             if(!admin){
-                res.status(404).json({ message: 'Admin not found' });
+                res.status(404).json({ error: 'Admin not found' });
                 return;
             }
             admin.fullname = fullname;
@@ -36,7 +36,7 @@ exports.modifyUser = asyncHandler(async (req, res) => {
       
        
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ error: error.message });
     }
 });
 
@@ -44,7 +44,7 @@ exports.deleteUser = asyncHandler(async (req, res) => {
     try {
         const user = await User.findById(req.params.userId);
         if (!user) {
-            res.status(404).json({ message: 'User not found' });
+            res.status(404).json({ error: 'User not found' });
             return;
         }
       
@@ -57,17 +57,17 @@ exports.deleteUser = asyncHandler(async (req, res) => {
         else{
             const admin = Admin.findOne({ email: user.email });
             if(!admin){
-                res.status(404).json({ message: 'Admin not found' });
+                res.status(404).json({ error: 'Admin not found' });
                 return;
             }
             
             await user.remove();
             await admin.remove();
-            res.json({ message: 'Admin deleted successfully' });
+            res.status(201).json({ message: 'Admin deleted successfully' });
         }
        
     } catch (error) {
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ error: 'Server error' });
     }
 });
 
@@ -87,7 +87,7 @@ exports.addUser = asyncHandler(async (req, res) => {
         }
        
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ error: error.message });
     }
 });
 
@@ -97,7 +97,7 @@ exports.getCurrentUser = asyncHandler(async (req, res) => {
     try {
         const currentUser = await User.findById(userId);
         if (!currentUser) {
-            res.status(404).json({ message: 'User not found' });
+            res.status(404).json({ error: 'User not found' });
             return;
         }
         if(currentUser.role == 'jobseeker'){
@@ -111,6 +111,6 @@ exports.getCurrentUser = asyncHandler(async (req, res) => {
             res.status(201).json(admin);
         }
     } catch (error) {
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ error: 'Server error' });
     }
 });
