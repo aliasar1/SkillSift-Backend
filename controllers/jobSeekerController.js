@@ -8,12 +8,12 @@ const registerJobSeeker = asyncHandler(async (req, res) => {
     const { fullname, contact_no, email, password } = req.body;
     try {
         if (!fullname || !contact_no || !email || !password) {
-            return res.status(400).json({ message: "All fields are required" });
+            return res.status(400).json({ error: "All fields are required" });
         }
 
         const jobSeekerExist = await JobSeeker.findOne({ email });
         if (jobSeekerExist) {
-            return res.status(400).json({ message: "Email already exists" });
+            return res.status(400).json({ error: "Email already exists" });
         }
 
         const hashedPass = await bcrypt.hash(password, 10);
@@ -24,7 +24,7 @@ const registerJobSeeker = asyncHandler(async (req, res) => {
         res.status(201).json({ _id: jobSeeker._id, email: user.email });
     } catch (error) {
         console.error(error);
-        res.status(400).json({ message: "JobSeeker data not valid" });
+        res.status(400).json({ error: "JobSeeker data not valid" });
     }
 });
 
@@ -32,7 +32,7 @@ const registerJobSeeker = asyncHandler(async (req, res) => {
 const loginJobSeeker = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
-        res.status(400).json({ message: "All fields are required" });
+        res.status(400).json({ error: "All fields are required" });
         return;
     }
 
@@ -49,7 +49,7 @@ const loginJobSeeker = asyncHandler(async (req, res) => {
 
         res.status(200).json({ accessToken });
     } else {
-        res.status  (401).json({ message: "Email or password is not valid" });
+        res.status  (401).json({ error: "Email or password is not valid" });
     }
 });
 
