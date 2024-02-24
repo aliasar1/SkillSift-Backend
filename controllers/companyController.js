@@ -26,9 +26,6 @@ exports.addCompanyInfo = asyncHandler(async (req, res) => {
             return res.status(400).json({ error: `Missing required fields: ${missingFields.join(', ')}` });
         }
 
-        console.log(companyPhone)
-        console.log(geolocation)
-
         const newCompany = new Company({
             companyName,
             industry,
@@ -42,8 +39,6 @@ exports.addCompanyInfo = asyncHandler(async (req, res) => {
             geolocation,
             logoImage
         });
-
-        console.log(newCompany);
 
         const recruiterId = req.params.id;
         const recruiter = await Recruiter.findById(recruiterId);
