@@ -6,6 +6,8 @@ const recruiterRoutes = require('../routes/recruiterRoutes');
 const authRoutes = require('../routes/authRoutes');
 const forgotPasswordRoutes = require('../routes/forgotPasswordRoutes');
 const resetPasswordRoutes = require('../routes/resetPasswordRoutes');
+const companyRoutes = require('../routes/companyRoutes');
+const jobRoutes = require('../routes/jobRoutes');
 
 module.exports = function (app) {
     app.use(express.json());
@@ -16,4 +18,6 @@ module.exports = function (app) {
     app.use("/authenticate", authRoutes);
     app.use('/forgot', forgotPasswordRoutes)
     app.use('/reset', resetPasswordRoutes)
+    app.use("/company", companyRoutes);
+    app.use("/job", jobRoutes);
 }

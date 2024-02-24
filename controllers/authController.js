@@ -5,6 +5,7 @@ const Recruiter = require('../models/recruiterModel');
 const JobSeeker = require('../models/jobSeekerModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const Company = require('../models/companyModel');
 
 exports.login = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
@@ -39,3 +40,4 @@ exports.login = asyncHandler(async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 });
+

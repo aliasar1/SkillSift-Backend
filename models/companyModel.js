@@ -6,9 +6,12 @@ const companySchema = new mongoose.Schema({
         required: true
     },
     industry: String,
-    location: String,
-    comapnyPhone: String,
-    comapnyEmail: String,
+    geolocation: {
+        type: [Number], 
+        index: '2dsphere' 
+    },
+    companyPhone: String, 
+    companyEmail: String,
     country: String,
     state: String,
     city: String,
