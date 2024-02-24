@@ -29,6 +29,9 @@ const userSchema = new mongoose.Schema({
         enum: ['rejected', 'accepted', 'pending'],
         default: 'pending'
     }
+    ,
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
 });
 
 module.exports = mongoose.model('User', userSchema);
