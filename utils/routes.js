@@ -4,6 +4,7 @@ const jobSeekerRoutes = require('../routes/jobSeekerRoutes');
 const userRoutes = require('../routes/userRoutes');
 const recruiterRoutes = require('../routes/recruiterRoutes');
 const authRoutes = require('../routes/authRoutes');
+const companyRoutes = require('../routes/companyRoutes');
 
 module.exports = function (app){
     app.use(express.json());
@@ -12,4 +13,5 @@ module.exports = function (app){
     app.use("/jobseeker", jobSeekerRoutes);
     app.use("/recruiter", recruiterRoutes);
     app.use("/authenticate", authRoutes);
+    app.use("/company", companyRoutes);
 }
