@@ -15,7 +15,7 @@ exports.addCompanyInfo = asyncHandler(async (req, res) => {
             street,
             postalCode,
             geolocation,
-            logoImage 
+            logoImage
         } = req.body;
 
         // Check for required fields
