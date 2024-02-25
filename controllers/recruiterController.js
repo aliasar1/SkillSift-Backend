@@ -54,7 +54,7 @@ exports.getCurrentRecruiter = asyncHandler(async (req, res) => {
         const id = req.params.id;
         console.log(id)
 ;
-        const recruiter = await Recruiter.findById(id).populate('company_id');
+        const recruiter = await Recruiter.findById(id);
 
         if (!recruiter) {
             return res.status(404).json({ error: 'Recruiter not found' });

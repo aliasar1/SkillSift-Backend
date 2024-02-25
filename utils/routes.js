@@ -4,8 +4,7 @@ const jobSeekerRoutes = require('../routes/jobSeekerRoutes');
 const userRoutes = require('../routes/userRoutes');
 const recruiterRoutes = require('../routes/recruiterRoutes');
 const authRoutes = require('../routes/authRoutes');
-const forgotPasswordRoutes = require('../routes/forgotPasswordRoutes');
-const resetPasswordRoutes = require('../routes/resetPasswordRoutes');
+const passwordRoutes = require('../routes/passwordRoutes');
 const companyRoutes = require('../routes/companyRoutes');
 const jobRoutes = require('../routes/jobRoutes');
 
@@ -16,8 +15,7 @@ module.exports = function (app) {
     app.use("/jobseeker", jobSeekerRoutes);
     app.use("/recruiter", recruiterRoutes);
     app.use("/authenticate", authRoutes);
-    app.use('/forgot', forgotPasswordRoutes)
-    app.use('/reset', resetPasswordRoutes)
+    app.use('/password', passwordRoutes)
     app.use("/company", companyRoutes);
     app.use("/job", jobRoutes);
 }
