@@ -52,7 +52,6 @@ exports.loginRecruiter = asyncHandler(async (req, res) => {
 exports.getCurrentRecruiter = asyncHandler(async (req, res) => {
     try {
         const id = req.params.id;
-        console.log(id)
 ;
         const recruiter = await Recruiter.findById(id);
 

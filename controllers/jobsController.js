@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const Job = require('../models/jobModel');
 const Recruiter = require('../models/recruiterModel');
 
+
 exports.createJob = asyncHandler(async (req, res) => {
     const { recruiter_id, title, description, skillsrequired, experienceRequired, deadline, qualificationRequired, mode, minSalary, maxSalary, type, jdUrl } = req.body;
 
@@ -84,3 +85,4 @@ exports.deleteJob = asyncHandler(async (req, res) => {
 
     res.json({ message: 'Job deleted successfully' });
 });
+

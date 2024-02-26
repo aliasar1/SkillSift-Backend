@@ -7,6 +7,7 @@ const authRoutes = require('../routes/authRoutes');
 const passwordRoutes = require('../routes/passwordRoutes');
 const companyRoutes = require('../routes/companyRoutes');
 const jobRoutes = require('../routes/jobRoutes');
+const uploadRoutes = require('../routes/uploadRoutes');
 
 module.exports = function (app) {
     app.use(express.json());
@@ -18,4 +19,5 @@ module.exports = function (app) {
     app.use('/password', passwordRoutes)
     app.use("/company", companyRoutes);
     app.use("/job", jobRoutes);
+    app.use("/s3", uploadRoutes);
 }
