@@ -17,8 +17,10 @@ const upload = multer({
         acl: "public-read",
         bucket: BUCKET,
         key: function (req, file, cb) {
-            console.log(file);
-            cb(null, file.originalname);
+            let directory = req.params.directory || 'default'; 
+            directory = directory.replace(/_/g, '/');
+            const fileName = `${directory}/${Date.now()}_${file.originalname}`;
+            cb(null, fileName);
         }
     })
 });
@@ -33,7 +35,7 @@ module.exports = {
                     console.log(err)
                     return res.status(500).send({ error: 'Server error' });
                 }
-                res.send('Successfully uploaded ' + req.file.location + ' location!');
+                res.status(201).send({'url': req.file.location});
             });
         } catch (error) {
             console.error(error);

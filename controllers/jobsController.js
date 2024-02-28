@@ -2,9 +2,8 @@ const asyncHandler = require('express-async-handler');
 const Job = require('../models/jobModel');
 const Recruiter = require('../models/recruiterModel');
 
-
 exports.createJob = asyncHandler(async (req, res) => {
-    const { recruiter_id, title, description, skillsrequired, experienceRequired, deadline, qualificationRequired, mode, minSalary, maxSalary, type, jdUrl } = req.body;
+    const { recruiter_id, title, description, skillsrequired, experienceRequired, deadline, qualificationRequired, mode, minSalary, maxSalary, type } = req.body;
 
     const recruiter = await Recruiter.findById(recruiter_id);
     if (!recruiter) {
@@ -24,7 +23,7 @@ exports.createJob = asyncHandler(async (req, res) => {
         maxSalary,
         type,
         status: 'active',
-        jdUrl,
+        jdUrl: '',
     });
 
     recruiter.jobsAdded.push(job._id);
@@ -86,3 +85,20 @@ exports.deleteJob = asyncHandler(async (req, res) => {
     res.json({ message: 'Job deleted successfully' });
 });
 
+exports.updateUrl = asyncHandler(async (req, res) => {
+    const jobId = req.params.jobId;
+    const { newUrl } = req.body;
+
+    try {
+        const job = await Job.findById(jobId);
+        
+        job.jdUrl = newUrl;
+        
+        await job.save();
+
+        res.status(200).json({ message: 'Job URL updated successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
