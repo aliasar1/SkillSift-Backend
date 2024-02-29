@@ -88,15 +88,22 @@ exports.deleteJob = asyncHandler(async (req, res) => {
 exports.updateUrl = asyncHandler(async (req, res) => {
     const jobId = req.params.jobId;
     const { newUrl } = req.body;
+    console.log(jobId);
+    console.log(newUrl);
+    
 
     try {
         const job = await Job.findById(jobId);
+        console.log(job);
         
+        console.log(newUrl);
         job.jdUrl = newUrl;
+        console.log(job.jdUrl);
         
         await job.save();
+        console.log(job)
 
-        res.status(200).json({ message: 'Job URL updated successfully' });
+        res.status(200).json({ message: 'Job URL updated successfully', job: job});
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Server error' });

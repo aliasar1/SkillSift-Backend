@@ -17,9 +17,11 @@ const upload = multer({
         acl: "public-read",
         bucket: BUCKET,
         key: function (req, file, cb) {
+            console.log('File:', file);
             let directory = req.params.directory || 'default'; 
             directory = directory.replace(/_/g, '/');
             const fileName = `${directory}/${Date.now()}_${file.originalname}`;
+            console.log('FileName:', fileName);
             cb(null, fileName);
         }
     })
@@ -28,17 +30,17 @@ const upload = multer({
 module.exports = {
     uploadFile: async (req, res, next) => {
         try {
+            console.log('Request File:', req.file);
             upload.single('file')(req, res, function (err) {
-                if (err instanceof multer.MulterError) {
-                    return res.status(400).send({ error: 'File upload error' });
-                } else if (err) {
-                    console.log(err)
+                console.log('Request File after upload:', req.file);
+                 if (err) {
+                    console.log('Error:', err);
                     return res.status(500).send({ error: 'Server error' });
                 }
                 res.status(201).send({'url': req.file.location});
             });
         } catch (error) {
-            console.error(error);
+            console.error('Caught Error:', error);
             res.status(500).send({ error: 'Server error' });
         }
     },
@@ -48,7 +50,7 @@ module.exports = {
             let x = r.Contents.map(item => item.Key);
             res.send(x);
         } catch (error) {
-            console.error(error);
+            console.error('Error Listing Files:', error);
             res.status(500).send({ error: 'Server error' });
         }
     },
@@ -58,7 +60,7 @@ module.exports = {
             let x = await s3.getObject({ Bucket: BUCKET, Key: filename }).promise();
             res.send(x.Body);
         } catch (error) {
-            console.error(error);
+            console.error('Error Downloading File:', error);
             res.status(500).send({ error: 'Server error' });
         }
     },
@@ -68,7 +70,7 @@ module.exports = {
             await s3.deleteObject({ Bucket: BUCKET, Key: filename }).promise();
             res.send("File Deleted Successfully");
         } catch (error) {
-            console.error(error);
+            console.error('Error Deleting File:', error);
             res.status(500).send({ error: 'Server error' });
         }
     }
