@@ -14,20 +14,21 @@ const jobSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    skillsrequired: [String],
-    experienceRequired: Number,
-    timestamp: {
+    skill_tags: [String],
+    qualification_required: String,
+    experience_required: String,
+    mode: String,
+    type: String,
+    industry: String,
+    min_salary: Number,
+    max_salary: Number,
+    jdUrl: String,
+    status: String,
+    deadline: Date,
+    time_stamp: {
         type: Date,
         default: Date.now
-    },
-    deadline: Date,
-    qualificationRequired: String,
-    mode: String,
-    minSalary: Number,
-    maxSalary: Number,
-    type: String,
-    status: String,
-    jdUrl: String
+    }
 });
 
 module.exports = mongoose.model('Job', jobSchema);

@@ -14,8 +14,6 @@ exports.registerRecruiter = asyncHandler(async (req, res) => {
             return res.status(400).json({ error: 'Email already exists' });
         }
 
-        // const company = await Company.create({ companyName, industry, location, companyPhone, companyEmail, street, city, state, country, postalCode: postalcode });
-
         const hashedPass = await bcrypt.hash(password, 10);
         const user = await User.create({  email, password: hashedPass, role: "recruiter" });
 

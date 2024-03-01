@@ -1,29 +1,33 @@
 const asyncHandler = require('express-async-handler');
 const Job = require('../models/jobModel');
 const Recruiter = require('../models/recruiterModel');
+const moment = require('moment');
 
 exports.createJob = asyncHandler(async (req, res) => {
-    const { recruiter_id, title, description, skillsrequired, experienceRequired, deadline, qualificationRequired, mode, minSalary, maxSalary, type } = req.body;
+    const { recruiter_id, title, description, skill_tags, qualification_required, experience_required, mode, type, industry, min_salary, max_salary, jdUrl, deadline } = req.body;
 
     const recruiter = await Recruiter.findById(recruiter_id);
     if (!recruiter) {
         return res.status(404).json({ error: 'Recruiter not found' });
     }
 
+    const formattedDeadline = moment(deadline, 'DD-MM-YYYY').toDate();
+    console.log(formattedDeadline)
     const job = await Job.create({
         recruiter_id,
         title,
         description,
-        skillsrequired,
-        experienceRequired,
-        deadline,
-        qualificationRequired,
+        skill_tags,
+        qualification_required,
+        experience_required,
         mode,
-        minSalary,
-        maxSalary,
         type,
-        status: 'active',
+        industry,
+        min_salary,
+        max_salary,
         jdUrl: '',
+        deadline: formattedDeadline,
+        status: 'active'
     });
 
     recruiter.jobsAdded.push(job._id);
@@ -46,24 +50,25 @@ exports.getJobById = asyncHandler(async (req, res) => {
 });
 
 exports.updateJob = asyncHandler(async (req, res) => {
-    const { title, description, skillsrequired, experienceRequired, deadline, qualificationRequired, mode, minSalary, maxSalary, type, jdUrl } = req.body;
-
     const job = await Job.findById(req.params.jobId);
     if (!job) {
         return res.status(404).json({ error: 'Job not found' });
     }
 
+    const { title, description, skill_tags, qualification_required, experience_required, mode, type, industry, min_salary, max_salary, jdUrl, deadline } = req.body;
+
     job.title = title || job.title;
     job.description = description || job.description;
-    job.skillsrequired = skillsrequired || job.skillsrequired;
-    job.experienceRequired = experienceRequired || job.experienceRequired;
-    job.deadline = deadline || job.deadline;
-    job.qualificationRequired = qualificationRequired || job.qualificationRequired;
+    job.skill_tags = skill_tags || job.skill_tags;
+    job.qualification_required = qualification_required || job.qualification_required;
+    job.experience_required = experience_required || job.experience_required;
     job.mode = mode || job.mode;
-    job.minSalary = minSalary || job.minSalary;
-    job.maxSalary = maxSalary || job.maxSalary;
     job.type = type || job.type;
-    job.jdUrl = jdUrl || job.jdUrl;
+    job.industry = industry || job.industry;
+    job.min_salary = min_salary || job.min_salary;
+    job.max_salary = max_salary || job.max_salary;
+    job.jdUrl = job.jdUrl;
+    job.deadline = deadline || job.deadline;
 
     await job.save();
 
@@ -88,22 +93,17 @@ exports.deleteJob = asyncHandler(async (req, res) => {
 exports.updateUrl = asyncHandler(async (req, res) => {
     const jobId = req.params.jobId;
     const { newUrl } = req.body;
-    console.log(jobId);
-    console.log(newUrl);
-    
 
     try {
         const job = await Job.findById(jobId);
-        console.log(job);
-        
-        console.log(newUrl);
-        job.jdUrl = newUrl;
-        console.log(job.jdUrl);
-        
-        await job.save();
-        console.log(job)
+        if (!job) {
+            return res.status(404).json({ error: 'Job not found' });
+        }
 
-        res.status(200).json({ message: 'Job URL updated successfully', job: job});
+        job.jdUrl = newUrl;
+        await job.save();
+
+        res.status(200).json({ message: 'Job URL updated successfully', job: job });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Server error' });
