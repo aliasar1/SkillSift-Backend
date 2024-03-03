@@ -37,7 +37,7 @@ exports.createJob = asyncHandler(async (req, res) => {
 });
 
 exports.getAllJobs = asyncHandler(async (req, res) => {
-    const jobs = await Job.find().populate('recruiter_id', 'fullname contact_no email');
+    const jobs = await Job.find();
     res.json(jobs);
 });
 

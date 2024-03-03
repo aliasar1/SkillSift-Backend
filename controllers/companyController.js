@@ -54,6 +54,19 @@ exports.addCompanyInfo = asyncHandler(async (req, res) => {
 
         return res.status(201).json({ success: true, data: newCompany });
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        return res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+exports.getCompanyDetails = asyncHandler(async (req, res) => {
+    try{
+        const company = await Company.findById(req.params.id);
+        if(!company){
+            return res.status(404).json({ success: false, error: 'Company not found' });
+        }
+        return res.status(201).json({ success: true, data: company });
+    }
+    catch(error){  
+        return res.status(500).json({ success: false, error: error.message });
     }
 });
