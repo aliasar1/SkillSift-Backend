@@ -18,7 +18,7 @@ const upload = multer({
         bucket: BUCKET,
         key: function (req, file, cb) {
             console.log('File:', file);
-            let directory = req.params.directory || 'default'; 
+            let directory = req.params.directory || 'default';
             directory = directory.replace(/_/g, '/');
             const fileName = `${directory}/${Date.now()}_${file.originalname}`;
             console.log('FileName:', fileName);
@@ -33,11 +33,11 @@ module.exports = {
             console.log('Request File:', req.file);
             upload.single('file')(req, res, function (err) {
                 console.log('Request File after upload:', req.file);
-                 if (err) {
+                if (err) {
                     console.log('Error:', err);
                     return res.status(500).send({ error: 'Server error' });
                 }
-                res.status(201).send({'url': req.file.location});
+                res.status(201).send({ 'url': req.file.location });
             });
         } catch (error) {
             console.error('Caught Error:', error);
