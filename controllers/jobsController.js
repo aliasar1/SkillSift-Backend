@@ -55,7 +55,7 @@ exports.updateJob = asyncHandler(async (req, res) => {
         return res.status(404).json({ error: 'Job not found' });
     }
 
-    const { title, description, skill_tags, qualification_required, experience_required, mode, type, industry, min_salary, max_salary, jdUrl, deadline } = req.body;
+    const { title, description, skill_tags, qualification_required, experience_required, mode, type, industry, min_salary, max_salary, deadline } = req.body;
 
     job.title = title || job.title;
     job.description = description || job.description;
@@ -67,8 +67,7 @@ exports.updateJob = asyncHandler(async (req, res) => {
     job.industry = industry || job.industry;
     job.min_salary = min_salary || job.min_salary;
     job.max_salary = max_salary || job.max_salary;
-    job.jdUrl = job.jdUrl;
-    job.deadline = deadline || job.deadline;
+    job.deadline = deadline ? moment(deadline, 'DD-MM-YYYY').toDate() : job.deadline;
 
     await job.save();
 
