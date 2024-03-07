@@ -18,9 +18,11 @@ const upload = multer({
         bucket: BUCKET,
         key: function (req, file, cb) {
             console.log('File:', file);
+            console.log('ID:', req.body.id);
             let directory = req.params.directory || 'default';
             directory = directory.replace(/_/g, '/');
-            const fileName = `${directory}/${Date.now()}_${file.originalname}`;
+            const extension = file.originalname.split('.').pop();
+            const fileName = `${directory}/${req.body.id}.${extension}`;
             console.log('FileName:', fileName);
             cb(null, fileName);
         }
