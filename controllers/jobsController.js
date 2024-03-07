@@ -86,7 +86,7 @@ exports.deleteJob = asyncHandler(async (req, res) => {
 
     await Job.deleteOne({ _id: job._id });
 
-    res.json({ message: 'Job deleted successfully' });
+    res.json({ success: true, message: 'Job deleted successfully' });
 });
 
 exports.updateUrl = asyncHandler(async (req, res) => {
