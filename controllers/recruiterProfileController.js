@@ -23,7 +23,7 @@ exports.getRecruiterById = asyncHandler(async (req, res) => {
 
 exports.updateRecruiterProfile = asyncHandler(async (req, res) => {
     try {
-        const { fullname, contact_no, profilePicUrl, email } = req.body;
+        const { fullname, contact_no } = req.body;
 
         const recruiter = await Recruiter.findById(req.params.recruiterId);
         if (!recruiter) {
@@ -32,8 +32,6 @@ exports.updateRecruiterProfile = asyncHandler(async (req, res) => {
 
         recruiter.fullname = fullname || recruiter.fullname;
         recruiter.contact_no = contact_no || recruiter.contact_no;
-        recruiter.profilePicUrl = profilePicUrl || recruiter.profilePicUrl;
-        recruiter.email = email || recruiter.email;
 
         await recruiter.save();
 
