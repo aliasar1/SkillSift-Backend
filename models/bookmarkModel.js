@@ -6,11 +6,11 @@ const bookmarkSchema = new mongoose.Schema({
         ref: 'JobSeeker',
         required: true
     },
-    job_id: {
+    job_ids: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Job',
         required: true
-    }
+    }]
 });
 
 module.exports = mongoose.model('Bookmark', bookmarkSchema);

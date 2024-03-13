@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const Job = require('../models/jobModel');
 const Recruiter = require('../models/recruiterModel');
+const Company = require('../models/companyModel');
 const moment = require('moment');
 
 exports.createJob = asyncHandler(async (req, res) => {
@@ -36,13 +37,25 @@ exports.createJob = asyncHandler(async (req, res) => {
     res.status(201).json(job);
 });
 
+// exports.getRecruiterAddedJobs = asyncHandler(async (req, res) => {
+//     const id = req.params.id;
+//     console.log(id);
+//     const recruiter = await Recruiter.findById(id);
+//     if (!recruiter) {
+//         return res.status(404).json({ error: 'Recruiter not found' });
+//     }
+//     const jobs = await Job.find({'_id': id}).populate('jobsAdded');
+//     console.log(jobs);
+//     res.status(200).json(jobs);
+// });
+
 exports.getAllJobs = asyncHandler(async (req, res) => {
-    const jobs = await Job.find();
+    const jobs = await Job.find().populate();
     res.json(jobs);
 });
 
 exports.getJobById = asyncHandler(async (req, res) => {
-    const job = await Job.findById(req.params.jobId).populate('recruiter_id', 'fullname contact_no email');
+    const job = await Job.findById(req.params.jobId);
     if (!job) {
         return res.status(404).json({ error: 'Job not found' });
     }

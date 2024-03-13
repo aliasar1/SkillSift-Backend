@@ -53,8 +53,21 @@ const loginJobSeeker = asyncHandler(async (req, res) => {
     }
 });
 
-const currentJobSeeker = asyncHandler(async (req, res) => {
-    res.json(req.jobSeeker);
+const getCurrentJobseeker = asyncHandler(async (req, res) => {
+    try {
+        const id = req.params.id;
+;
+        const jobseeker = await JobSeeker.findById(id);
+
+        if (!jobseeker) {
+            return res.status(404).json({ error: 'Jobseeker not found' });
+        }
+
+        res.status(200).json(jobseeker);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 });
 
-module.exports = { registerJobSeeker, loginJobSeeker, currentJobSeeker };
+
+module.exports = { registerJobSeeker, loginJobSeeker, getCurrentJobseeker };
