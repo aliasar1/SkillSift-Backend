@@ -62,3 +62,23 @@ exports.deleteJobSeekerProfile = asyncHandler(async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+exports.updateProfilePicUrl =  asyncHandler(async (req, res) => {
+    const jobseekerId = req.params.id;
+    const { newUrl } = req.body;
+
+    try {
+        const jobseeker = await JobSeeker.findById(jobseekerId);
+        if (!jobseeker) {
+            return res.status(404).json({ error: 'Jobseeker not found' });
+        }
+
+        jobseeker.profilePicUrl = newUrl;
+        await jobseeker.save();
+
+        res.status(200).json({ message: 'Profile pic updated successfully', jobseeker: jobseeker });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});

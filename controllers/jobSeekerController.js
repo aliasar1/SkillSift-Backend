@@ -19,7 +19,7 @@ const registerJobSeeker = asyncHandler(async (req, res) => {
         const hashedPass = await bcrypt.hash(password, 10);
         const user = await User.create({ email, password: hashedPass, role: "jobseeker" });
 
-        const jobSeeker = await JobSeeker.create({ user_id: user._id, fullname, contact_no, email });
+        const jobSeeker = await JobSeeker.create({ user_id: user._id, fullname, contact_no, email, profilePicUrl: '' });
 
         res.status(201).json({ _id: jobSeeker._id, email: user.email });
     } catch (error) {
