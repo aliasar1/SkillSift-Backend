@@ -61,7 +61,7 @@ const updateApplicationUrl =  asyncHandler(async (req, res) => {
         application.cvUrl = newUrl;
         await application.save();
 
-        res.status(200).json({ message: 'CV Url updated successfully', recruiter: recruiter });
+        res.status(200).json({ message: 'CV Url updated successfully', application: application });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Server error' });
