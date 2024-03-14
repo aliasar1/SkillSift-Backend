@@ -11,6 +11,7 @@ const uploadRoutes = require('../routes/uploadRoutes');
 const jobSeekerProfileRoutes = require('../routes/jobSeekerProfileRoutes');
 const recruiterProfileRoutes = require('../routes/recruiterProfileRoutes');
 const bookmarkRoutes = require('../routes/bookmarkRoutes');
+const applicationRoutes = require('../routes/applicationRoutes');
 
 module.exports = function (app) {
     app.use(express.json());
@@ -26,4 +27,5 @@ module.exports = function (app) {
     app.use("/jobseekerprofile", jobSeekerProfileRoutes);
     app.use("/recruiterprofile", recruiterProfileRoutes);
     app.use("/bookmark", bookmarkRoutes);
+    app.use('/applications', applicationRoutes);
 }
