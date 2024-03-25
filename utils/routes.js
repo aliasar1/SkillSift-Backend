@@ -16,18 +16,18 @@ const level1Routes= require('../routes/level1Routes');
 
 module.exports = function (app) {
     app.use(express.json());
-    app.use("/admin", adminRoutes);
-    app.use("/user", userRoutes);
-    app.use("/jobseeker", jobSeekerRoutes);
-    app.use("/recruiter", recruiterRoutes);
-    app.use("/authenticate", authRoutes);
-    app.use('/password', passwordRoutes)
-    app.use("/company", companyRoutes);
-    app.use("/job", jobRoutes);
-    app.use("/s3", uploadRoutes);
-    app.use("/jobseekerprofile", jobSeekerProfileRoutes);
-    app.use("/recruiterprofile", recruiterProfileRoutes);
-    app.use("/bookmark", bookmarkRoutes);
-    app.use('/applications', applicationRoutes);
-    app.use('/level1', level1Routes);
+    app.use("api/v1/admin", adminRoutes);
+    app.use("api/v1/user", userRoutes);
+    app.use("api/v1/jobseeker", jobSeekerRoutes);
+    app.use("api/v1/recruiter", recruiterRoutes);
+    app.use("api/v1/authenticate", authRoutes);
+    app.use('api/v1/password', passwordRoutes)
+    app.use("api/v1/company", companyRoutes);
+    app.use("api/v1/job", jobRoutes);
+    app.use("api/v1/s3", uploadRoutes);
+    app.use("api/v1/jobseekerprofile", jobSeekerProfileRoutes);
+    app.use("api/v1/recruiterprofile", recruiterProfileRoutes);
+    app.use("api/v1/bookmark", bookmarkRoutes);
+    app.use('api/v1/applications', applicationRoutes);
+    app.use('api/v1/level1', level1Routes);
 }
