@@ -1,2 +1,4 @@
 node_modules
 .env
+skillsift-admin_accessKeys.csv
+skillsift-admin_credentials.csv
