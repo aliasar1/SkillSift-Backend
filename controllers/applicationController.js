@@ -10,6 +10,16 @@ const getAllApplications = asyncHandler(async (req, res) => {
     }
 });
 
+const getTotalApplicationsOfJob = asyncHandler(async (req, res) => {
+    try {
+        const applications = await Application.find({ job_id: req.params.id });
+        
+        res.status(200).json({count: applications.length});
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 const findApplicationById = asyncHandler(async (req, res) => {
     try {
         const application = await Application.findById(req.params.id);
@@ -96,5 +106,6 @@ module.exports = {
     apply,
     updateApplicationUrl,
     getApplicationsByJobSeeker,
-    getApplicationStatus
+    getApplicationStatus,
+    getTotalApplicationsOfJob
 };
