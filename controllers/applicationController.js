@@ -68,10 +68,33 @@ const updateApplicationUrl =  asyncHandler(async (req, res) => {
     }
 });
 
+const getApplicationStatus = asyncHandler(async (req, res) => {
+    try {
+        const application = await Application.findById(req.params.id);
+        if (!application) {
+            return res.status(404).json({ message: 'Application not found' });
+        }
+        res.status(200).json({ application_status: application.application_status });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+const getApplicationsByJobSeeker = asyncHandler(async (req, res) => {
+    try {
+        const applications = await Application.find({ jobseeker_id: req.params.id });
+        res.status(200).json(applications);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 module.exports = {
     getAllApplications,
     findApplicationById,
     findApplicationsByJobId,
     apply,
-    updateApplicationUrl
+    updateApplicationUrl,
+    getApplicationsByJobSeeker,
+    getApplicationStatus
 };

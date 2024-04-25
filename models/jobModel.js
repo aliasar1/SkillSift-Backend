@@ -23,6 +23,7 @@ const jobSchema = new mongoose.Schema({
     min_salary: Number,
     max_salary: Number,
     jdUrl: String,
+    jdJsonUrl: String,
     status: String,
     deadline: Date,
     time_stamp: {
