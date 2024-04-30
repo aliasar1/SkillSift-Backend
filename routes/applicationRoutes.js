@@ -8,7 +8,9 @@ router.get('/job/application-count/:id', applicationController.getTotalApplicati
 router.get('/status/:id', applicationController.getApplicationStatus);
 router.get('/:id', applicationController.findApplicationById);
 router.get('/job/:jobId', applicationController.findApplicationsByJobId);
+router.get('/sort', applicationController.findApplicationsSorted);
 router.post('/', applicationController.apply);
 router.put('/update-url/:id', applicationController.updateApplicationUrl);
+router.put('/update-status', applicationController.updateApplicationStatusAndLevel);
 
 module.exports = router;

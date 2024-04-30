@@ -142,3 +142,23 @@ exports.updateJsonUrl = asyncHandler(async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+
+exports.updateJobStatus = asyncHandler(async (req, res) => {
+    const jobId = req.params.jobId;
+    const { status } = req.body;
+
+    try {
+        const job = await Job.findById(jobId);
+        if (!job) {
+            return res.status(404).json({ error: 'Job not found' });
+        }
+
+        job.status = status;
+        await job.save();
+
+        res.status(200).json({ message: 'Job status updated successfully', job: job });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});

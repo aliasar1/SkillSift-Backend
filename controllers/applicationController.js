@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Application = require('../models/applicationModel');
+const Level1 = require('../models/level1Model');
 
 const getAllApplications = asyncHandler(async (req, res) => {
     try {
@@ -13,8 +14,8 @@ const getAllApplications = asyncHandler(async (req, res) => {
 const getTotalApplicationsOfJob = asyncHandler(async (req, res) => {
     try {
         const applications = await Application.find({ job_id: req.params.id });
-        
-        res.status(200).json({count: applications.length});
+
+        res.status(200).json({ count: applications.length });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -32,7 +33,7 @@ const findApplicationById = asyncHandler(async (req, res) => {
     }
 });
 
-const findApplicationsByJobId =  asyncHandler(async (req, res) => {
+const findApplicationsByJobId = asyncHandler(async (req, res) => {
     try {
         const applications = await Application.find({ job_id: req.params.jobId });
         res.status(200).json(applications);
@@ -41,7 +42,7 @@ const findApplicationsByJobId =  asyncHandler(async (req, res) => {
     }
 });
 
-const apply =  asyncHandler(async (req, res) => {
+const apply = asyncHandler(async (req, res) => {
     const application = new Application({
         job_id: req.body.job_id,
         jobseeker_id: req.body.jobseeker_id,
@@ -58,7 +59,7 @@ const apply =  asyncHandler(async (req, res) => {
     }
 });
 
-const updateApplicationUrl =  asyncHandler(async (req, res) => {
+const updateApplicationUrl = asyncHandler(async (req, res) => {
     const applicationId = req.params.id;
     const { newUrl } = req.body;
 
@@ -99,6 +100,43 @@ const getApplicationsByJobSeeker = asyncHandler(async (req, res) => {
     }
 });
 
+const updateApplicationStatusAndLevel = async (req, res) => {
+    const { applicationId, status, currentLevel, applicationStatus } = req.body;
+    try {
+        const application = await Application.findByIdAndUpdate(applicationId, {
+            application_status: applicationStatus,
+            currentLevel: currentLevel
+        }, { new: true });
+
+        await Level1.findOneAndUpdate(
+            { application_id: applicationId },
+            { status: status }
+        );
+        res.status(200).json({ message: 'Application status updated successfully' , application});
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const findApplicationsSorted = asyncHandler(async (req, res) => {
+    try {
+        const applications = await Application.find({ job_id: req.params.jobId });
+
+        await Application.populate(applications, { path: 'level1' });
+
+        applications.sort((a, b) => {
+            const scoreA = a.level1 ? a.level1.score : 0;
+            const scoreB = b.level1 ? b.level1.score : 0;
+            return scoreB - scoreA;
+        });
+
+        res.status(200).json(applications);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+
 module.exports = {
     getAllApplications,
     findApplicationById,
@@ -107,5 +145,7 @@ module.exports = {
     updateApplicationUrl,
     getApplicationsByJobSeeker,
     getApplicationStatus,
-    getTotalApplicationsOfJob
+    getTotalApplicationsOfJob,
+    updateApplicationStatusAndLevel,
+    findApplicationsSorted
 };

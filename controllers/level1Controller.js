@@ -41,3 +41,16 @@ exports.deleteLevel1 = asyncHandler(async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+exports.getLevel1ByApplicationId = asyncHandler(async (req, res) => {
+    try {
+        const level1 = await Level1.findOne({ application_id: req.params.applicationId });
+        if (!level1) {
+            res.status(404).json({ message: 'Level1 data not found for the specified application ID' });
+            return;
+        }
+        res.status(200).json(level1);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
