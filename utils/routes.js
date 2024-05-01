@@ -13,6 +13,8 @@ const recruiterProfileRoutes = require('../routes/recruiterProfileRoutes');
 const bookmarkRoutes = require('../routes/bookmarkRoutes');
 const applicationRoutes = require('../routes/applicationRoutes');
 const level1Routes= require('../routes/level1Routes');
+const quizSummaryRoutes= require('../routes/quizSummaryRoutes');
+const level2Routes= require('../routes/level2Routes');
 
 module.exports = function (app) {
     app.use(express.json());
@@ -30,4 +32,6 @@ module.exports = function (app) {
     app.use("/api/v1/bookmark", bookmarkRoutes);
     app.use('/api/v1/applications', applicationRoutes);
     app.use('/api/v1/level1', level1Routes);
+    app.use('/api/v1/summary', quizSummaryRoutes);
+    app.use('/api/v1/level2', level2Routes);
 }

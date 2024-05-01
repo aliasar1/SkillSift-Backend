@@ -7,10 +7,11 @@ const level2Schema = new mongoose.Schema({
         required: true
     },
     score: Number,
-    qna_id: [{
+    status: String,
+    qna_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'QnA'
-    }]
+        ref: 'QuizSummary'
+    }
 });
 
 module.exports = mongoose.model('Level2', level2Schema);
