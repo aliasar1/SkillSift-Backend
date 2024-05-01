@@ -1,28 +1,43 @@
 const QuizSummary = require('../models/quizSummaryModel');
+const QuizResponse = require('../models/quizResponseModel');
 
-exports.addQuizSummary = async (req, res) => {
+exports.addSummary = async (req, res) => {
   try {
-    const { question, choices, correctAns, userAnswer, status, job_id, jobseeker_id } = req.body;
+    const { responses, application_id } = req.body;
+    const responseIds = [];
+
+    for (const response of responses) {
+      const { question, choices, correctAns, userAnswer, status } = response;
+      const quizResponse = new QuizResponse({
+        question,
+        choices,
+        correctAns,
+        userAnswer,
+        status,
+        application_id
+      });
+      const savedResponse = await quizResponse.save();
+      responseIds.push(savedResponse._id);
+    }
+
     const quizSummary = new QuizSummary({
-      question,
-      choices,
-      correctAns,
-      userAnswer,
-      status,
-      job_id,
-      jobseeker_id
+      responses: responseIds,
+      application_id
     });
+
     await quizSummary.save();
+
     res.status(201).json({ message: 'Quiz summary added successfully', quizSummary });
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
 
-exports.getQuizSummariesByJobseekerAndJob = async (req, res) => {
+
+exports.getQuizSummariesByApplicationId = async (req, res) => {
   try {
-    const { jobseekerId, jobId } = req.params;
-    const quizSummaries = await QuizSummary.find({ jobseeker_id: jobseekerId, job_id: jobId });
+    const { applicationId } = req.params;
+    const quizSummaries = await QuizSummary.find({ application_id: applicationId }).populate('responses');
     res.status(200).json(quizSummaries);
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
