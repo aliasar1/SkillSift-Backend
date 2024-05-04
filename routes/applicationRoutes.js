@@ -9,6 +9,7 @@ router.get('/status/:id', applicationController.getApplicationStatus);
 router.get('/:id', applicationController.findApplicationById);
 router.get('/job/:jobId', applicationController.findApplicationsByJobId);
 router.get('/sort', applicationController.findApplicationsSorted);
+router.get('/max-level/:jobId', applicationController.findTheMaxLevel);
 router.post('/', applicationController.apply);
 router.put('/update-url/:id', applicationController.updateApplicationUrl);
 router.put('/update-status', applicationController.updateApplicationStatusAndLevel);

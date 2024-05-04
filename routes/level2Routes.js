@@ -6,5 +6,6 @@ router.post('/', level2Controller.addScore);
 router.get('/:applicationId', level2Controller.getScoreByApplicationId);
 router.get('/exists/:applicationId', level2Controller.checkIfApplicationIdExists);
 router.put('/:applicationId', level2Controller.updateStatusByApplicationId);
+router.get('/by-application/:applicationId', level2Controller.getLevel2ByApplicationId);
 
 module.exports = router;

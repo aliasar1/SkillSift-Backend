@@ -136,6 +136,26 @@ const findApplicationsSorted = asyncHandler(async (req, res) => {
     }
 });
 
+const findTheMaxLevel = asyncHandler(async (req, res) => {
+    try {
+        const jobId = req.params.jobId;
+
+        const applications = await Application.find({ job_id: jobId });
+
+        let maxLevel = -1;
+
+        applications.forEach(application => {
+            if (application.currentLevel > maxLevel) {
+                maxLevel = application.currentLevel;
+            }
+        });
+
+        res.status(200).json({ maxLevel });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 
 module.exports = {
     getAllApplications,
@@ -147,5 +167,6 @@ module.exports = {
     getApplicationStatus,
     getTotalApplicationsOfJob,
     updateApplicationStatusAndLevel,
-    findApplicationsSorted
+    findApplicationsSorted,
+    findTheMaxLevel
 };

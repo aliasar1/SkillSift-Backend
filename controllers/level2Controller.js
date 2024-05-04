@@ -55,3 +55,16 @@ exports.updateStatusByApplicationId = async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 };
+
+exports.getLevel2ByApplicationId = async (req, res) => {
+    try {
+        const level2 = await Level2.findOne({ application_id: req.params.applicationId });
+        if (!level2) {
+            res.status(404).json({ message: 'Level2 data not found for the specified application ID' });
+            return;
+        }
+        res.status(200).json(level2);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
