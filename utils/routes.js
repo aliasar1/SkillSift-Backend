@@ -21,9 +21,6 @@ module.exports = function (app) {
     app.use(express.json());
     app.use("/api/v1/admin", adminRoutes);
     app.use("/api/v1/user", userRoutes);
-    app.use("/api/v1/test", (req, res) => {
-        res.send("LIVE");
-    });
     app.use("/api/v1/jobseeker", jobSeekerRoutes);
     app.use("/api/v1/recruiter", recruiterRoutes);
     app.use("/api/v1/authenticate", authRoutes);
