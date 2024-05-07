@@ -9,7 +9,7 @@ const level3Schema = new mongoose.Schema({
     score: Number,
     caseStudy_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'CaseStudy'
+        ref: 'CaseStudySession'
     }
 });
 
