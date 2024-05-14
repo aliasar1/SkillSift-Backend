@@ -2,12 +2,12 @@ const CaseStudySession = require('../models/caseStudySession');
 
 const addStartTime = async (req, res) => {
     try {
-        const { question, response } = req.body;
+        const { question, response} = req.body;
         const existingSession = await CaseStudySession.findOne({ application_id: req.params.applicationId });
         if (existingSession) {
             throw new Error('Session already exists for this application');
         }
-        const newSession = new CaseStudySession({ application_id: req.params.applicationId, question: question, response: response });
+        const newSession = new CaseStudySession({ application_id: req.params.applicationId, question: question, response: response, status: "pending" });
         await newSession.save();
         
         console.log(newSession);
@@ -33,7 +33,7 @@ const getSessionData = async (req, res) => {
 
 const saveProgress = async (req, res) => {
     try {
-        const { question, response } = req.body;
+        const { question, response, status, submissionTime} = req.body;
         const applicationId = req.params.applicationId;
 
         const session = await CaseStudySession.findOne({ application_id: applicationId });
@@ -43,6 +43,8 @@ const saveProgress = async (req, res) => {
 
         session.question = question;
         session.response = response;
+        session.status = status;
+        session.submissionTime = submissionTime;
         await session.save();
 
         res.status(200).json({ message: 'Progress saved successfully', session });

@@ -17,6 +17,10 @@ const caseStudySessionSchema = new mongoose.Schema({
         required: true,
         default: Date.now,
     },
+    status: { type: String, required: true },
+    submissionTime: {
+        type: Date,
+    },
 });
 
 const CaseStudySession = mongoose.model('CaseStudySession', caseStudySessionSchema);
