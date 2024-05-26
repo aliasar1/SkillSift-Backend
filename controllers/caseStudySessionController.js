@@ -7,7 +7,7 @@ const addStartTime = async (req, res) => {
         if (existingSession) {
             throw new Error('Session already exists for this application');
         }
-        const newSession = new CaseStudySession({ application_id: req.params.applicationId, question: question, response: response, status: "pending" });
+        const newSession = new CaseStudySession({ application_id: req.params.applicationId, question: question, response: response, status: "pending" , score: 0});
         await newSession.save();
         
         console.log(newSession);
@@ -33,7 +33,7 @@ const getSessionData = async (req, res) => {
 
 const saveProgress = async (req, res) => {
     try {
-        const { question, response, status, submissionTime} = req.body;
+        const { question, response, status, score} = req.body;
         const applicationId = req.params.applicationId;
 
         const session = await CaseStudySession.findOne({ application_id: applicationId });
@@ -44,7 +44,8 @@ const saveProgress = async (req, res) => {
         session.question = question;
         session.response = response;
         session.status = status;
-        session.submissionTime = submissionTime;
+        session.score = score || 0;
+        session.submissionTime = new Date();
         await session.save();
 
         res.status(200).json({ message: 'Progress saved successfully', session });
@@ -53,8 +54,22 @@ const saveProgress = async (req, res) => {
     }
 };
 
+const getScoreByApplicationId = async (req, res) => {
+    try {
+        const { applicationId } = req.params;
+        const score = await CaseStudySession.findOne({ application_id: applicationId });
+        if (!score) {
+            return res.status(404).json({ success: false, message: 'Score not found' });
+        }
+        res.status(200).json({ success: true, data: score });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
+
 module.exports = {
     addStartTime,
     getSessionData,
-    saveProgress
+    saveProgress,
+    getScoreByApplicationId,
 };

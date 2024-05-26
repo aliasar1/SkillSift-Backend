@@ -18,8 +18,11 @@ const caseStudySessionSchema = new mongoose.Schema({
         default: Date.now,
     },
     status: { type: String, required: true },
+    score: Number,
     submissionTime: {
         type: Date,
+        required: true,
+        default: Date.now,
     },
 });
 
