@@ -1,6 +1,8 @@
 const asyncHandler = require('express-async-handler');
 const Application = require('../models/applicationModel');
 const Level1 = require('../models/level1Model');
+const Level2 = require('../models/level2Model');
+const Level3 = require('../models/caseStudySession');
 
 const getAllApplications = asyncHandler(async (req, res) => {
     try {
@@ -108,10 +110,23 @@ const updateApplicationStatusAndLevel = async (req, res) => {
             currentLevel: currentLevel
         }, { new: true });
 
-        await Level1.findOneAndUpdate(
-            { application_id: applicationId },
-            { status: status }
-        );
+        if(currentLevel == "2"){
+            await Level1.findOneAndUpdate(
+                { application_id: applicationId },
+                { status: status }
+            );
+        }
+        else if(currentLevel == "3"){
+            await Level2.findOneAndUpdate(
+                { application_id: applicationId },
+                { status: status }
+            );
+        }else{
+            await Level3.findOneAndUpdate(
+                { application_id: applicationId },
+                { status: status }
+            );
+        }
         res.status(200).json({ message: 'Application status updated successfully' , application});
     } catch (error) {
         res.status(500).json({ message: error.message });
