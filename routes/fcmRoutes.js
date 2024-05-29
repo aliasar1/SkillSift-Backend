@@ -6,6 +6,8 @@ router.post('/', fcmController.createFcmToken);
 
 router.get('/', fcmController.getAllFcmTokens);
 
+router.get('/user/:userId', fcmController.getFcmTokensByUserId);
+
 router.get('/:id', fcmController.getFcmTokenById);
 
 router.put('/:id', fcmController.updateFcmTokenById);

@@ -34,6 +34,19 @@ exports.getFcmTokenById = async (req, res) => {
     }
 };
 
+exports.getFcmTokensByUserId = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const fcmTokens = await Fcm.find({ user_id: userId }).populate('user_id');
+        
+        if (fcmTokens.length === 0) return res.status(404).json({ message: 'FCM Tokens not found for this user' });
+
+        res.status(200).json(fcmTokens);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 exports.updateFcmTokenById = async (req, res) => {
     try {
         const { id } = req.params;
