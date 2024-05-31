@@ -60,3 +60,17 @@ exports.sendNotification = async (req, res) => {
         res.status(500).json({ message: 'Failed to send notification.' });
     }
 };
+
+exports.getAllTokensOfUser = async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const userFCM = await FCM.findOne({ user_id: userId });
+        if (!userFCM) {
+            return res.status(404).json({ message: 'No tokens found for this user' });
+        }
+        res.status(200).json(userFCM.fcmTokens);
+    } catch (error) {
+        console.error('Error fetching tokens: ', error);
+        res.status(500).json({ message: 'Failed to fetch tokens' });
+    }
+};
