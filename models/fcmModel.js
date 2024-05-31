@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 const fcmSchema = new mongoose.Schema({
-    fcmToken: [{
+    fcmTokens: [{
         type: String,
         required: true
     }],
-    user_id: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
