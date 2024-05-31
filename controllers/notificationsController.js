@@ -3,52 +3,56 @@ const FCM = require('../models/fcmModel');
 
 exports.registerToken = async (req, res) => {
     const { fcmToken, userId } = req.body;
-    if (!fcmToken || !userId) {
-        return res.status(400).json({ message: 'fcmToken and userId are required.' });
+   
+    if (!userId) {
+        return res.status(400).json({ message: 'User ID is required' });
     }
 
     try {
-        let fcmEntry = await FCM.findOne({ userId });
-        if (fcmEntry) {
-            if (!fcmEntry.fcmTokens.includes(fcmToken)) {
-                fcmEntry.fcmTokens.push(fcmToken);
-                await fcmEntry.save();
+        let fcmRecord = await FCM.findOne({ user_id: userId });
+        if (fcmRecord) {
+            if (!fcmRecord.fcmTokens.includes(fcmToken)) {
+                fcmRecord.fcmTokens.push(fcmToken);
+                await fcmRecord.save();
             }
         } else {
-            fcmEntry = new FCM({ userId, fcmTokens: [fcmToken] });
-            await fcmEntry.save();
+            fcmRecord = new FCM({
+                user_id: userId,
+                fcmTokens: [fcmToken],
+            });
+            await fcmRecord.save();
         }
-        res.status(200).send('Token registered successfully');
+
+        res.status(200).json({ message: 'Token registered successfully' });
     } catch (error) {
         console.error('Error registering token: ', error);
-        res.status(500).json({ message: 'Failed to register token.' });
+        res.status(500).json({ message: 'Failed to register token' });
     }
 };
 
 exports.removeToken = async (req, res) => {
     const { fcmToken, userId } = req.body;
-    if (!fcmToken || !userId) {
-        return res.status(400).json({ message: 'fcmToken and userId are required.' });
+
+    if (!userId) {
+        return res.status(400).json({ message: 'User ID is required' });
     }
 
     try {
-        const fcmEntry = await FCM.findOne({ userId });
-        if (fcmEntry) {
-            fcmEntry.fcmTokens = fcmEntry.fcmTokens.filter(token => token !== fcmToken);
-            if (fcmEntry.fcmTokens.length === 0) {
-                await FCM.deleteOne({ userId });
-            } else {
-                await fcmEntry.save();
-            }
-            res.status(200).send('Token removed successfully');
+        let fcmRecord = await FCM.findOne({ user_id: userId });
+
+        if (fcmRecord) {
+            fcmRecord.fcmTokens = fcmRecord.fcmTokens.filter(token => token !== fcmToken);
+            await fcmRecord.save();
+            res.status(200).json({ message: 'Token deleted successfully' });
         } else {
-            res.status(404).json({ message: 'User not found.' });
+            res.status(404).json({ message: 'User not found' });
         }
     } catch (error) {
-        console.error('Error removing token: ', error);
-        res.status(500).json({ message: 'Failed to remove token.' });
+        console.error('Error deleting token: ', error);
+        res.status(500).json({ message: 'Failed to delete token' });
     }
 };
+
 
 exports.sendNotification = async (req, res) => {
     const { fcmToken, title, body } = req.body;
