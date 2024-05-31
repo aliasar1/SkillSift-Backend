@@ -38,7 +38,7 @@ exports.getFcmTokensByUserId = async (req, res) => {
     try {
         const { userId } = req.params;
         const fcmToken = await Fcm.find({ user_id: userId });
-        if(fcmToken){
+        if(!fcmToken){
             return res.status(404).json({ message: 'FCM Token not found for this user' });
         }
         res.status(200).json(fcmToken);

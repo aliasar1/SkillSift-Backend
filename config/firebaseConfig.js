@@ -3,53 +3,30 @@ const serviceAccount = require('../serviceAccount.json');
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
+    projectId: "skillsift-f1225"
 });
 
-async function sendNotificationToRecruiter(recruiterFcmToken, jobSeekerName, jobTitle) {
+const messaging = admin.messaging();
+
+async function sendNotification(fcmToken, title, body) {
     const message = {
-        token: recruiterFcmToken,
+        token: fcmToken,
         notification: {
-            title: 'New Job Application',
-            body: `${jobSeekerName} has applied for ${jobTitle}`,
-        },
-        data: {
-            jobSeekerName: jobSeekerName,
-            jobTitle: jobTitle,
+            title: title,
+            body: body,
         },
     };
 
     try {
-        await admin.messaging().send(message);
-        console.log('Notification sent successfully to recruiter');
+        await messaging.send(message);
+        console.log('Notification sent successfully.');
     } catch (error) {
-        console.error('Error sending notification to recruiter:', error);
-        throw error; // Rethrow the error to be caught by the controller
-    }
-}
-
-async function sendNotificationToJobSeeker(jobSeekerFcmToken, recruiterName, jobTitle) {
-    const message = {
-        token: jobSeekerFcmToken,
-        notification: {
-            title: 'Job Application Accepted',
-            body: `Your application for ${jobTitle} has been accepted by ${recruiterName}`,
-        },
-        data: {
-            recruiterName: recruiterName,
-            jobTitle: jobTitle,
-        },
-    };
-
-    try {
-        await admin.messaging().send(message);
-        console.log('Notification sent successfully to job seeker');
-    } catch (error) {
-        console.error('Error sending notification to job seeker:', error);
-        throw error; // Rethrow the error to be caught by the controller
+        console.error('Error sending notification: ', error);
+        throw error; 
     }
 }
 
 module.exports = {
-    sendNotificationToRecruiter,
-    sendNotificationToJobSeeker,
+    sendNotification,
 };
+

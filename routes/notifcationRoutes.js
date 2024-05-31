@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { sendNotificationToRecruiter, sendNotificationToJobSeeker } = require('../controllers/notificationsController');
+const { sendNotification } = require('../controllers/notificationsController');
 
-router.post('/sendNotificationToRecruiter', sendNotificationToRecruiter);
-
-router.post('/sendNotificationToJobSeeker', sendNotificationToJobSeeker);
+router.post('/send', sendNotification);
 
 module.exports = router;
