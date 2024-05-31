@@ -16,7 +16,6 @@ const level1Routes= require('../routes/level1Routes');
 const quizSummaryRoutes= require('../routes/quizSummaryRoutes');
 const level2Routes= require('../routes/level2Routes');
 const caseStudySessionRoutes= require('../routes/caseStudySessionRoutes');
-const fcmRoutes = require('../routes/fcmRoutes');
 const notifcationRoutes = require('../routes/notifcationRoutes');
 
 module.exports = function (app) {
@@ -38,6 +37,5 @@ module.exports = function (app) {
     app.use('/api/v1/summary', quizSummaryRoutes);
     app.use('/api/v1/level2', level2Routes);
     app.use('/api/v1/caseStudySession', caseStudySessionRoutes);
-    app.use('/api/v1/fcm', fcmRoutes);
     app.use('/api/v1/notifcations', notifcationRoutes);
 }
