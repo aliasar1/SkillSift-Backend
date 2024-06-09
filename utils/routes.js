@@ -17,6 +17,7 @@ const quizSummaryRoutes= require('../routes/quizSummaryRoutes');
 const level2Routes= require('../routes/level2Routes');
 const caseStudySessionRoutes= require('../routes/caseStudySessionRoutes');
 const notificationRoutes = require('../routes/notificationRoutes');
+const interviewRputes = require('../routes/interviewRoutes');
 
 module.exports = function (app) {
     app.use(express.json());
@@ -38,4 +39,5 @@ module.exports = function (app) {
     app.use('/api/v1/level2', level2Routes);
     app.use('/api/v1/caseStudySession', caseStudySessionRoutes);
     app.use('/api/v1/notifications', notificationRoutes);
+    app.use('/api/v1/interview', interviewRputes);
 }
