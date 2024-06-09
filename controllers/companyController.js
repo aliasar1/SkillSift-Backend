@@ -70,3 +70,12 @@ exports.getCompanyDetails = asyncHandler(async (req, res) => {
         return res.status(500).json({ success: false, error: error.message });
     }
 });
+
+exports.getAllCompanies = asyncHandler(async (req, res) => {
+    try {
+        const companies = await Company.find({});
+        return res.status(200).json({ success: true, data: companies });
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+});
