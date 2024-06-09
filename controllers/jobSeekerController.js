@@ -28,6 +28,14 @@ const registerJobSeeker = asyncHandler(async (req, res) => {
     }
 });
 
+const getTotalJobSeekers = asyncHandler(async (req, res) => {
+    try {
+        const totalJobSeekers = await JobSeeker.countDocuments();
+        res.status(200).json({ totalJobSeekers });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
 
 const loginJobSeeker = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
@@ -70,4 +78,4 @@ const getCurrentJobseeker = asyncHandler(async (req, res) => {
 });
 
 
-module.exports = { registerJobSeeker, loginJobSeeker, getCurrentJobseeker };
+module.exports = { registerJobSeeker, loginJobSeeker, getCurrentJobseeker, getTotalJobSeekers };

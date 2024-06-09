@@ -13,6 +13,15 @@ const getAllApplications = asyncHandler(async (req, res) => {
     }
 });
 
+const getTotalApplications = asyncHandler(async (req, res) => {
+    try {
+        const totalApplications = await Application.countDocuments();
+        res.status(200).json({ totalApplications });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 const getTotalApplicationsOfJob = asyncHandler(async (req, res) => {
     try {
         const applications = await Application.find({ job_id: req.params.id });
@@ -183,5 +192,6 @@ module.exports = {
     getTotalApplicationsOfJob,
     updateApplicationStatusAndLevel,
     findApplicationsSorted,
-    findTheMaxLevel
+    findTheMaxLevel,
+    getTotalApplications
 };

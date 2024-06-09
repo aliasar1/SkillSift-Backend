@@ -38,6 +38,15 @@ exports.createJob = asyncHandler(async (req, res) => {
     res.status(201).json(job);
 });
 
+exports.getTotalJobs = asyncHandler(async (req, res) => {
+    try {
+        const totalJobs = await Job.countDocuments();
+        res.status(200).json({ totalJobs });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 // exports.getRecruiterAddedJobs = asyncHandler(async (req, res) => {
 //     const id = req.params.id;
 //     console.log(id);

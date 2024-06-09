@@ -3,6 +3,7 @@ const router = express.Router();
 const applicationController = require('../controllers/applicationController');
 
 router.get('/', applicationController.getAllApplications);
+router.get('/total', applicationController.getTotalApplications);
 router.get('/jobseeker/:id', applicationController.getApplicationsByJobSeeker);
 router.get('/job/application-count/:id', applicationController.getTotalApplicationsOfJob);
 router.get('/status/:id', applicationController.getApplicationStatus);
