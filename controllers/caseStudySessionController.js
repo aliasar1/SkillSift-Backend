@@ -67,9 +67,37 @@ const getScoreByApplicationId = async (req, res) => {
     }
 };
 
+const checkSessionExists = async (req, res) => {
+    try {
+        const { applicationId } = req.params;
+        const session = await CaseStudySession.findOne({ application_id: applicationId });
+        if (!session) {
+            return res.status(200).json({ exists: false });
+        }
+        res.status(200).json({ exists: true, session });
+    } catch (error) {
+        res.status(500).json({ message: `Error checking session existence: ${error.message}` });
+    }
+};
+
+const checkScoreExists = async (req, res) => {
+    try {
+        const { applicationId } = req.params;
+        const score = await CaseStudySession.findOne({ application_id: applicationId });
+        if (!score) {
+            return res.status(404).json({ success: false, message: 'Score not found' });
+        }
+        res.status(200).json({ success: true, data: score });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
+
 module.exports = {
     addStartTime,
     getSessionData,
     saveProgress,
     getScoreByApplicationId,
+    checkSessionExists,
+    checkScoreExists,
 };
