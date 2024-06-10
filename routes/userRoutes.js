@@ -1,10 +1,12 @@
 const express = require('express');
-const { getAllUsers, modifyUser, deleteUser, addUser, getCurrentUser, modifyUserStatus, } = require('../controllers/userController');
+const { getAllUsers, modifyUser, deleteUser, addUser, getCurrentUser, modifyUserStatus, getUserStatus } = require('../controllers/userController');
 const validateToken = require('../middlewares/validateTokenHandler');
 const validateAdminToken = validateToken('admin');
 const validateUserToken = validateToken('user');
 
 const router = express.Router();
+
+router.get('/getStatus/:id', getUserStatus);
 
 router.get('/', validateAdminToken, getAllUsers);
 

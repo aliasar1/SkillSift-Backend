@@ -1,4 +1,5 @@
 const InterviewSchedule = require('../models/interviewModel');
+const mailer = require('../utils/mailer');
 
 exports.scheduleInterview = async (req, res) => {
     const { application_id, date, time } = req.body;
@@ -19,6 +20,20 @@ exports.scheduleInterview = async (req, res) => {
         res.status(201).json(savedInterview);
     } catch (error) {
         res.status(500).json({ message: error.message });
+    }
+};
+
+exports.sendInterviewEmail = async (req, res) => {
+    const { data, email } = req.body;
+
+    try {
+        await mailer(email, 'Interview Scheduled!', data);
+
+        res.status(200).json({ message: 'Interview email sent successfully!' });
+    } catch (error) {
+        console.error('Error sending interview email:', error);
+
+        res.status(500).json({ message: 'Failed to send interview email. Please try again later.' });
     }
 };
 

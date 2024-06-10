@@ -130,3 +130,20 @@ exports.modifyUserStatus = asyncHandler(async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 });
+
+exports.getUserStatus = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const user = await User.findById(id);
+    
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.json({ status: user.status });
+    } catch (err) {
+        console.error('Error getting user status:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
