@@ -78,7 +78,14 @@ exports.getCurrentRecruiterCompany = asyncHandler(async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 });
-
+exports.getAllRecruiters = asyncHandler(async (req, res) => {
+    try {
+        const recruiters = await Recruiter.find().populate('user_id');
+        res.status(200).json(recruiters);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
 exports.getTotalRecruiter = asyncHandler(async (req, res) => {
     try {
         const totalRecruiter = await Recruiter.countDocuments();
