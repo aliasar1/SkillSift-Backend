@@ -114,3 +114,19 @@ exports.getCurrentUser = asyncHandler(async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+
+exports.modifyUserStatus = asyncHandler(async (req, res) => {
+    try {
+        const user = await User.findById(req.params.userId);
+        if (!user) {
+            res.status(404).json({ error: 'User not found' });
+            return;
+        }
+        const { status } = req.body;
+        user.status = status;
+        await user.save();
+        res.json(user);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
